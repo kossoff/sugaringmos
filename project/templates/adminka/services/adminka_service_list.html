@@ -1,0 +1,82 @@
+{% extends "adminka_index.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}Услуги{% endblock %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'js/plugins/forms/validate.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/forms/uniform.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/interface/datatables.min.js' %}"></script>
+{% endblock %}
+
+{% block adminka_menu %}{% include 'adminka_menu.html' with active='services' %}{% endblock %}
+
+{% block page_name %}Список страниц с услугами{% endblock %}
+{% block page_info %}Услуги{% endblock %}
+
+{% block breadcrumbs %}
+    <li><a href="{% url 'ns_adminka:adhome' %}">Главная</a></li>
+    <li class="active">Услуги</li>
+{% endblock %}
+
+{% block middle %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".datatable table").dataTable({
+                "order": [[ 0, "asc" ]],
+                "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [-1] }],
+                pagingType: 'simple',
+                dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+                language: { paginate: { 'next': 'Дальше →', 'previous': '← Назад' },
+                            search: '<span>Поиск:</span> _INPUT_',
+                            emptyTable: "Нет данных",
+                            zeroRecords: "Нет совпадающих записей",
+                            info: "Показаны _START_ - _END_ из _TOTAL_ записей",
+                            infoEmpty: "",
+                            lengthMenu: "Показывать: _MENU_"},
+                displayLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Все"]]
+            });
+            $(".dataTables_filter input").attr("placeholder", "Введите текст");
+            $('.tip').tooltip();
+        });
+    </script>
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="panel-title"><i class="icon-flag2"></i> Услуги</h6>
+                <a class="pull-right btn btn-xs btn-default" href="{% url 'ns_adminka:ns_services:crud' 0 'insert' %}">
+                    <i class="icon-plus"></i> Добавить страницу услуг
+                </a>
+            </div>
+            <div class="datatable">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Название</th>
+                            <th>Для ссылки</th>
+                            <th>Включена</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in services %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <a href="{% url 'ns_adminka:ns_services:single' s.id %}"
+                                   data-original-title="Редактировать">
+                                    {% if s.title %}{{ s.title }}{% else %}Услуга #{{ s.id }}{% endif %}
+                                </a>
+                            </td>
+                            <td>{% if s.link %}{{ s.link }}{% else %}&mdash;{% endif %}</td>
+                            <td>{% if s.enabled %}<i class="icon-checkmark3"></i>{% else %}&mdash;{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

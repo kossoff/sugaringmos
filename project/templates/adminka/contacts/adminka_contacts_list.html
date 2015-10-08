@@ -1,0 +1,52 @@
+{% extends "adminka_index.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}Контакты{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block adminka_menu %}{% include 'adminka_menu.html' with active='contacts' %}{% endblock %}
+
+{% block page_name %}Контактные данные{% endblock %}
+{% block page_info %}Контакты{% endblock %}
+
+{% block breadcrumbs %}
+    <li><a href="{% url 'ns_adminka:adhome' %}">Главная</a></li>
+    <li class="active">Контакты</li>
+{% endblock %}
+
+{% block breacrumbs_buttons %}{% endblock %}
+
+{% block middle %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h6 class="panel-title"><i class="icon-address-book"></i> Контакты</h6>
+            <a class="pull-right btn btn-xs btn-default" href="{% url 'ns_adminka:ns_contacts:edit' %}">
+                <i class="icon-pencil"></i> Редактировать
+            </a>
+        </div>
+        <div class="datatable">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Код</th>
+                        <th>Название</th>
+                        <th>Значение</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in conlist %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ c.code }}</td>
+                        <td>{{ c.name|safe }}</td>
+                        <td>{{ c.body }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

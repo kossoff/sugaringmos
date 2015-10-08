@@ -1,0 +1,89 @@
+{% extends "adminka_index.html" %}
+{% load staticfiles %}
+
+{% block title %}Предприятия{% endblock %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'js/plugins/forms/uniform.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/interface/datatables.min.js' %}"></script>
+{% endblock %}
+
+{% block page_name %}Предприятия{% endblock %}
+{% block page_info %}Справочник предприятий{% endblock %}
+
+{% block breadcrumbs %}
+    <li><a href="{% url 'ns_adminka:adhome' %}">Главная</a></li>
+    <li class="active">Предприятия</li>
+{% endblock %}
+
+{% block main_menu %}{% include 'main_menu.html' with active='enterprise' %}{% endblock %}
+
+{% block middle %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".datatable table").dataTable({
+                "order": [[ 0, "asc" ]],
+                "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [-1] }],
+                pagingType: 'simple',
+                dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+                language: { paginate: { 'next': 'Дальше →', 'previous': '← Назад' },
+                            search: '<span>Поиск:</span> _INPUT_',
+                            emptyTable: "Нет данных",
+                            zeroRecords: "Нет совпадающих записей",
+                            info: "Показаны _START_ - _END_ из _TOTAL_ записей",
+                            infoEmpty: "",
+                            lengthMenu: "Показывать: _MENU_"},
+                displayLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Все"]]
+            });
+            $(".dataTables_filter input").attr("placeholder", "Введите текст");
+            $('.tip').tooltip();
+        });
+    </script>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h6 class="panel-title"><i class="icon-office"></i> Предприятия</h6>
+            <a class="pull-right btn btn-xs btn-primary" href="">
+                <i class="icon-plus"></i> Добавить предприятие
+            </a>
+        </div>
+        <div class="datatable">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Наименование</th>
+                        <th>ИНН</th>
+                        <th>КПП</th>
+                        <th>Добавлено</th>
+                        <th>Кол-во форм</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in entlist %}
+                    <tr>
+                        <td>{% if e.name %}{{ e.name }}{% else %}<span class="text-danger">нет данных</span>{% endif %}</td>
+                        <td>{% if e.inn %}{{ e.inn }}{% else %}<span class="text-danger">нет данных</span>{% endif %}</td>
+                        <td>{% if e.kpp %}{{ e.kpp }}{% else %}<span class="text-danger">нет данных</span>{% endif %}</td>
+                        <td>{% if e.created %}{{ e.created|date:'d.m.Y' }}{% else %}<span class="text-danger">нет данных</span>{% endif %}</td>
+                        <td>{{ e.forms|safe }}</td>
+                        <td>
+                            <div class="table-controls">
+                                <a class="btn btn-primary btn-xs btn-icon tip" href="" data-original-title="Редактировать"><i class="icon-pencil"></i></a>
+                                {% if e.forms %}
+                                <a class="btn btn-primary btn-xs btn-icon tip"
+                                   onclick="$.jGrowl('Есть формы, связанные с предприятием &laquo;{{ e.name }}&raquo;', {theme: 'growl-error', header: 'Нельзя удалить!' });"
+                                   role="button"
+                                   data-original-title="Удалить"><i class="icon-remove"></i></a>
+                                {% else %}
+                                <a class="btn btn-primary btn-xs btn-icon tip" href="" data-original-title="Удалить"><i class="icon-remove"></i></a>
+                                {% endif %}
+				            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

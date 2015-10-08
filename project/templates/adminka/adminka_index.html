@@ -1,0 +1,129 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <title>{% block title %}DEFAULT{% endblock %} | АДМИНКА</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/londinium-theme.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/icons.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/fenix.css' %}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/application_blank.js' %}"></script>
+    <!-- Plugins -->
+    <script type="text/javascript" src="{% static 'js/plugins/interface/daterangepicker.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/interface/moment.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/interface/jgrowl.min.js' %}"></script>
+    {% block head %}{% endblock %}
+</head>
+<body>
+	<!-- Navbar -->
+	<div class="navbar navbar-inverse" role="navigation">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">АДМИНКА</a>
+			<a class="sidebar-toggle"><i class="icon-paragraph-justify2"></i></a>
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-icons">
+				<span class="sr-only">Пользователь</span>
+				<i class="icon-grid3"></i>
+			</button>
+			<button type="button" class="navbar-toggle offcanvas pull-left">
+				<span class="sr-only">Навигация</span>
+				<i class="icon-paragraph-justify2"></i>
+			</button>
+		</div>
+
+		<ul class="nav navbar-nav navbar-right collapse" id="navbar-icons">
+			<li class="user dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown">
+					<span>{% if user %}{{ user.get_username }}{% else %}USER NAME{% endif %}</span>
+					<i class="caret"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-right icons-right">
+					<li><a href="{% url 'ns_adminka:logout' %}"><i class="icon-exit"></i> Выход</a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+	<!-- /navbar -->
+
+
+	<!-- Page container -->
+ 	<div class="page-container">
+
+		<!-- Sidebar -->
+		<div class="sidebar">
+			<div class="sidebar-content">
+				<!-- Main navigation -->
+				<ul class="navigation">
+                    {% block adminka_menu %}{% include 'adminka_menu.html' with active='default' %}{% endblock %}
+                </ul>
+				<!-- /main navigation -->
+			</div>
+		</div>
+		<!-- /sidebar -->
+
+
+		<!-- Page content -->
+	 	<div class="page-content">
+
+			<!-- Breadcrumbs line -->
+			<div class="breadcrumb-line breadcrumb-top">
+				<ul class="breadcrumb">
+                    {% block breadcrumbs %}
+                        <li class="active">Главная</li>
+                    {% endblock %}
+				</ul>
+
+				<div class="visible-xs breadcrumb-toggle">
+					<a class="btn btn-link btn-lg btn-icon" data-toggle="collapse" data-target=".breadcrumb-buttons"><i class="icon-menu2"></i></a>
+				</div>
+
+				<ul class="breadcrumb-buttons collapse">
+                    {% block breacrumbs_buttons %}{% endblock %}
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-search3"></i> <span>Поиск</span> <b class="caret"></b></a>
+						<div class="popup dropdown-menu dropdown-menu-right">
+							<div class="popup-header">
+								<a href="#" class="pull-left"><i class="icon-paragraph-justify"></i></a>
+								<span>ПОИСК ПО СИСТЕМЕ</span>
+								<a href="#" class="pull-right"><i class="icon-new-tab"></i></a>
+							</div>
+							{% include 'search.html' %}
+						</div>
+					</li>
+				</ul>
+			</div>
+			<!-- /breadcrumbs line -->
+
+            <!-- Page header -->
+			<div class="page-header">
+				<div class="page-title">
+					<h3>{% block page_name %}Название страницы{% endblock %} <small>{% block page_info %}Дополнительная информация о странице{% endblock %}</small></h3>
+				</div>
+                {% block page_header %}{% endblock %}
+			</div>
+			<!-- /page header -->
+
+            {% block middle %}{% endblock %}
+
+	        <!-- Footer -->
+	        <div class="footer clearfix">
+		        <div class="pull-left">&copy; 2015 <strong>{{ contacts.brand }}</strong></div>
+	        	<!--div class="pull-right icons-group">
+	        		<a href="#"><i class="icon-screen2"></i></a>
+	        		<a href="#"><i class="icon-balance"></i></a>
+	        		<a href="#"><i class="icon-cog3"></i></a>
+	        	</div-->
+	        </div>
+	        <!-- /footer -->
+		</div>
+		<!-- /page content -->
+	</div>
+	<!-- /content -->
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}Цены{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block main_menu %}{% include 'main_menu.html' with l1_active='price' l2_active='none' %}{% endblock %}
+
+{% block page-header %}
+    <!-- PAGE HEADER : begin -->
+    <div id="page-header">
+        <div class="container">
+            <h1>Цены</h1>
+            <ul class="breadcrumbs no-list-style">
+                <li><a href="{% url 'home' %}">Главная</a></li>
+                <li>Цены</li>
+            </ul>
+        </div>
+    </div>
+    <!-- PAGE HEADER : begin -->
+{% endblock %}
+
+{% block core_class %}{% endblock %}
+
+{% block core %}
+    <!-- BASICS SECTION : begin -->
+	<section>
+        {% if price.image %}
+            {% thumbnail price.image price.size crop="smart" as thumb %}
+            <img class="thumbnail thumbnail-boxed"
+                 width="{{ thumb.width }}"
+                 height="{{ thumb.height }}"
+                 src="{{ thumb.url }}" />
+        {% endif %}
+    </section>
+    <section>
+        {% if text.text %}{{ text.text|safe }}{% endif %}
+    </section>
+{% endblock %}

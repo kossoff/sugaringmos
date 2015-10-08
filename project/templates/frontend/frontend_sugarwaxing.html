@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}Шугаринг или воск{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block main_menu %}{% include 'main_menu.html' with l1_active='sugarwaxing' l2_active='none' %}{% endblock %}
+
+{% block page-header %}
+    <!-- PAGE HEADER : begin -->
+    <div id="page-header">
+        <div class="container">
+            <h1>Шугаринг или воск</h1>
+            <ul class="breadcrumbs no-list-style">
+                <li><a href="{% url 'home' %}">Главная</a></li>
+                <li>Шугаринг или воск</li>
+            </ul>
+        </div>
+    </div>
+    <!-- PAGE HEADER : begin -->
+{% endblock %}
+
+{% block core_class %}{% endblock %}
+
+{% block core %}
+    <!-- BASICS SECTION : begin -->
+	<section>
+        {% if pg.image %}
+            {% thumbnail pg.image '819x614' crop="smart" as thumb %}
+            <img class="thumbnail thumbnail-boxed"
+                 width="{{ thumb.width }}"
+                 height="{{ thumb.height }}"
+                 src="{{ thumb.url }}" />
+        {% endif %}
+        {% if pg.text %}
+            <p>{{ pg.text|safe }}</p>
+        {% endif %}
+    </section>
+{% endblock %}

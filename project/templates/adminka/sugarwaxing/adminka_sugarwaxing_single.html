@@ -1,0 +1,103 @@
+{% extends "adminka_index.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}Шугаринг или воск{% endblock %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'js/plugins/forms/validate.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/forms/additional-methods.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/forms/uniform.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/adapters/jquery.js' %}"></script>
+{% endblock %}
+
+{% block adminka_menu %}{% include 'adminka_menu.html' with active='sugarwaxing' %}{% endblock %}
+
+{% block page_name %}Шугаринг или воск{% endblock %}
+{% block page_info %}Шугаринг или воск{% endblock %}
+
+{% block breadcrumbs %}
+    <li><a href="{% url 'ns_adminka:adhome' %}">Главная</a></li>
+    <li class="active">Шугаринг или воск</li>
+{% endblock %}
+
+{% block breacrumbs_buttons %}{% endblock %}
+
+{% block middle %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".styled, .multiselect-container input").uniform({
+                radioClass: 'choice',
+                fileDefaultHtml: 'Выберите файл .jpg или .png',
+                selectAutoWidth: false
+            });
+        });
+    </script>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h6 class="panel-title"><i class="icon-file"></i> Шугаринг или воск</h6>
+                    <a class="pull-right btn btn-xs btn-default" href="{% url 'ns_adminka:ns_sugarwaxing:edit' pg.id %}"><i class="icon-pencil"></i> Редактировать</a>
+                </div>
+                <div class="panel-body">
+                    {% if pg.text %}
+                        {{ pg.text|safe }}
+                    {% else %}
+                        <span class="text-danger">Нет данных</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h6 class="panel-title"><i class="icon-image2"></i> Изображение</h6>
+                    <button class="btn btn-xs btn-default pull-right" type="submit"
+                            onClick='$("#image_upload_form").submit(); return false'>
+                        <i class="icon-disk"></i> Сохранить
+                    </button>
+                    {% if pg.image %}
+                    <a class="btn btn-xs btn-danger pull-right" type="submit"
+                       href="{% url 'ns_adminka:ns_sugarwaxing:image' pg.id 'clear' %}">
+                        <i class="icon-close"></i> Удалить изображение
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal validate" role="form" enctype="multipart/form-data"
+                          action="{% url 'ns_adminka:ns_sugarwaxing:image' pg.id 'upload' %}" method="POST"
+                          id="image_upload_form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label text-right">Файл:</label>
+                            <div class="col-sm-10">
+                                <input type="file" name="faq_image" class="styled form-control" placeholder="Введите текст вопроса"/>
+                            </div>
+                        </div>
+                        <div class="form-group mb0">
+                            <label class="col-sm-2 control-label text-right">Изображение:</label>
+                            <div class="col-md-10">
+                                {% if pg.image %}
+                                    {% thumbnail pg.image '819x614' crop="smart" as thumb %}
+                                    <img class="thumbnail thumbnail-boxed"
+                                         width="{{ thumb.width }}"
+                                         height="{{ thumb.height }}"
+                                         src="{{ thumb.url }}" />
+                                {% else %}
+                                    <img class="thumbnail thumbnail-boxed"
+                                         width="170"
+                                         height="120"
+                                         src="{{ STATIC_URL }}images/no_image.png" />
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

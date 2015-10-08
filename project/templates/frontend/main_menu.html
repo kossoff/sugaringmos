@@ -1,0 +1,25 @@
+{% if l1_active and l2_active %}
+    <li {% if l1_active == 'frontpage' %}class="m-active"{% endif %}>
+        <span><a href="{% url 'home' %}">ГЛАВНАЯ</a></span>
+    </li>
+    <li {% if l1_active == 'services' %}class="m-active"{% endif %}>
+        <span><a>УСЛУГИ</a></span>
+        <ul class="sub-menu">
+            {% for s in servmenu %}
+                <li {% if l2_active == s.link %}class="m-active"{% endif %}><a href="/{{ s.link }}">{{ s.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </li>
+    <li {% if l1_active == 'price' %}class="m-active"{% endif %}>
+        <span><a href="{% url 'price' %}">ЦЕНЫ</a></span>
+    </li>
+    <li {% if l1_active == 'sugarwaxing' %}class="m-active"{% endif %}>
+        <span><a href="{% url 'sugarwaxing' %}">ШУГАРИНГ ИЛИ ВОСК</a></span>
+    </li>
+    <li {% if l1_active == 'faq' %}class="m-active"{% endif %}>
+        <span><a href="{% url 'faq' %}">ВОПРОСЫ И ОТВЕТЫ</a></span>
+    </li>
+    <li {% if l1_active == 'contacts' %}class="m-active"{% endif %}>
+        <span><a href="{% url 'contacts' %}">Контакты</a></span>
+    </li>
+{% endif %}

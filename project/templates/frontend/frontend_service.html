@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}{{ service.title }}{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block main_menu %}{% include 'main_menu.html' with l1_active='services' l2_active=service.link  %}{% endblock %}
+
+{% block page-header %}
+    <!-- PAGE HEADER : begin -->
+    <div id="page-header">
+        <div class="container">
+            <h1>{{ service.title }}</h1>
+            <ul class="breadcrumbs no-list-style">
+                <li><a href="{% url 'home' %}">Главная</a></li>
+                <li>{{ service.title }}</li>
+            </ul>
+        </div>
+    </div>
+    <!-- PAGE HEADER : begin -->
+{% endblock %}
+
+{% block core_class %}{% endblock %}
+
+{% block core %}
+    {% if pics.count > 1 %}
+        <div class="section">
+            {% for p in pics %}
+			    <p class=""><img width="604" src="/media/{{ p.image }}" class="size-full pull-right mb25 ml15"></p>
+            {% endfor %}
+            <div class="pr25">{{ service.text|safe }}</div>
+		</div>
+    {% else %}
+        {% for p in pics %}
+            <p class=""><img width="100%" src="/media/{{ p.image }}" class="size-full"></p>
+        {% endfor %}
+        <div class="">{{ service.text|safe }}</div>
+    {% endif %}
+{% endblock %}

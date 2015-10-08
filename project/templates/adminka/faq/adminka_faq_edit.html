@@ -1,0 +1,92 @@
+{% extends "adminka_index.html" %}
+{% load staticfiles %}
+
+{% block title %}{{ faq.question|safe }} (редактирование){% endblock %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'js/plugins/forms/validate.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/ckeditor.js' %}"></script>
+    <script type="text/javascript" src="{% static 'ckeditor/adapters/jquery.js' %}"></script>
+{% endblock %}
+
+{% block adminka_menu %}{% include 'adminka_menu.html' with active='faq' %}{% endblock %}
+
+{% block page_name %}{{ faq.question|safe }} (редактирование){% endblock %}
+{% block page_info %}Вопросы и ответы{% endblock %}
+
+{% block breadcrumbs %}
+    <li><a href="{% url 'ns_adminka:adhome' %}">Главная</a></li>
+    <li><a href="{% url 'ns_adminka:ns_faq:list' %}">Вопросы и ответы</a></li>
+    <li class="active">{{ faq.question|safe }} (редактирование)</li>
+{% endblock %}
+
+{% block middle %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".validate").validate({
+                ignore: ":hidden:not(textarea)",
+                rules: {
+                    faq_question: {
+                        required: true,
+                        minlength: 10,
+                        maxlength: 250
+                    },
+                    faq_answer: {
+                        required: true,
+                        minlength: 10,
+                        maxlength: 1000
+                    }
+                },
+                messages: {
+                    faq_question:{
+                        required: "Это поле обязательно для заполнения",
+                        minlength: "Минимальное число символов - 10",
+                        maxlength: "Максимальное число символов - 250"
+                     },
+                    faq_answer:{
+                        required: "Это поле обязательно для заполнения",
+                        minlength: "Минимальное число символов - 10",
+                        maxlength: "Максимальное число символов - 1000"
+                     }
+                },
+                success: function(label) {
+                    label.text('Корректно').addClass('valid');
+                }
+            });
+
+            $(".editor").ckeditor();
+
+        });
+    </script>
+    <form class="form-horizontal validate" role="form" enctype="multipart/form-data"
+          action="{% url 'ns_adminka:ns_faq:crud' faq.id 'update' %}" method="POST">
+        {% csrf_token %}
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h6 class="panel-title">
+                <i class="icon-pencil"></i> Редактирование вопроса-ответа
+            </h6></div>
+            <div class="panel-body">
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label text-right">Текст вопроса: <span class="mandatory">*</span></label>
+                    <div class="col-sm-10">
+                        <input type="text" name="faq_question" class="required form-control" placeholder="Введите текст вопроса" value="{{ faq.question }}"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label text-right">Текст ответа: <span class="mandatory">*</span></label>
+                    <div class="col-sm-10">
+                        <textarea id="faq_answer" name="faq_answer" class="editor required" placeholder="Введите текст ответа...">{{ faq.answer }}</textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions text-right">
+                    <input type="submit" value="Сохранить" class="btn btn-success"/>
+                    <a class="btn btn-danger" href="{% url 'ns_adminka:ns_faq:single' faq.id %}">Отмена</a>
+                </div>
+
+            </div>
+        </div>
+    </form>
+{% endblock %}

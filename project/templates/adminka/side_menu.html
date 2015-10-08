@@ -1,0 +1,71 @@
+{% if l1_active and l2_active %}
+    <li {% if l1_active == 'home' %}class="active"{% endif %}>
+        <a href="{% url 'home' %}"><i class="icon-home3 mr5"></i> <span>Главная</span></a>
+    </li>
+    <li {% if l1_active == 'gpv' %}class="active"{% endif %}>
+        <a href=""><i class="icon-notification mr5"></i> <span>ГПВ</span></a>
+    </li>
+    <li {% if l1_active == 'goz' %}class="active"{% endif %}>
+        <a href=""><i class="icon-notification mr5"></i> <span>ГОЗ</span></a>
+    </li>
+    <li {% if l1_active == 'fcp' %}class="active"{% endif %}>
+        <a href=""><i class="icon-notification mr5"></i> <span>ФЦП</span></a>
+    </li>
+    <li {% if l1_active == 'mpe' %}class="active"{% endif %}>
+        <a href=""><i class="icon-notification mr5"></i> <span>МПЭ</span></a>
+    </li>
+    <li {% if l1_active == 'vts' %}class="active"{% endif %}>
+        <a href=""><i class="icon-notification mr5"></i> <span>ВТС</span></a>
+    </li>
+    <li {% if l1_active == 'opk' %}class="active"{% endif %}>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-office mr5"></i> <span>ОПК</span> <b class="caret"></b></a>
+        <ul>
+            <li {% if l2_active == 'enterprise' %}class="active"{% endif %}>
+                <a href="">Предприятия</a>
+            </li>
+            <li {% if l2_active == 'classifiers' %}class="active"{% endif %}>
+                <a href="{% url 'ns_classifiers:ns_okfs:list' %}">Общероссийские классификаторы</a>
+            </li>
+            <li><a href="">Структура</a></li>
+            <li><a href="">Анализ</a></li>
+            <li><a href="">Состояние ПТО</a></li>
+            <li><a href="">Структурные преобразования ОПК</a></li>
+            <li><a href="">Мобилизационная готовность</a></li>
+            <li><a href="">Ресурсный потенциал</a></li>
+            <li><a href="">Технологии</a></li>
+            <li><a href="">Состояние уникальной стендовой базы</a></li>
+            <li><a href="">Финансовое состояние</a></li>
+            <li><a href="">Сведения</a></li>
+        </ul>
+
+    </li>
+    <li {% if l1_active == 'vvst' %}class="active"{% endif %}>
+        <a href=""><i class="icon-notification mr5"></i> <span>ВВСТ</span></a>
+    </li>
+    <li {% if l1_active == 'tio' %}class="active"{% endif %}>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-book2 mr5"></i> <span>ТиО</span> <b class="caret"></b></a>
+        <ul>
+            <li {% if l2_active == 'terms' %}class="active"{% endif %}>
+                <a href="{% url 'ns_terms:terms_list' %}">Терминология</a>
+            </li>
+            <li {% if l2_active == 'dicts' %}class="active"{% endif %}>
+                <a href="{% url 'ns_dicts:dicts_list' %}">Словари</a>
+            </li>
+        </ul>
+    </li>
+    <li {% if l1_active == 'npd' %}class="active"{% endif %}>
+        <a href=""><i class="icon-notification mr5"></i> <span>НПД</span></a>
+    </li>
+    <li {% if l1_active == 'sin' %}class="active"{% endif %}>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-paragraph-justify2 mr5"></i> <span>СиН</span> <b class="caret"></b></a>
+        <ul>
+            <li><a href="">Form components</a></li>
+            <li><a href="">Form layouts</a></li>
+            <li><a href="">Inputs grid</a></li>
+            <li><a href="">WYSIWYG editor</a></li>
+            <li><a href="">Validation</a></li>
+            <li><a href="">Multiple file uploader</a></li>
+            <li><a href="">Form snippets</a></li>
+        </ul>
+    </li>
+{% endif %}

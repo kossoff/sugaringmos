@@ -1,0 +1,47 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}Шугаринг вопросы и ответы{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block main_menu %}{% include 'main_menu.html' with l1_active='faq' l2_active='none' %}{% endblock %}
+
+{% block page-header %}
+    <!-- PAGE HEADER : begin -->
+    <div id="page-header">
+        <div class="container">
+            <h1>Вопросы и ответы</h1>
+            <ul class="breadcrumbs no-list-style">
+                <li><a href="{% url 'home' %}">Главная</a></li>
+                <li>Вопросы и ответы</li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block core_class %}{% endblock %}
+
+{% block core %}
+    <!-- BASICS SECTION : begin -->
+	<section>
+        {% for f in faq %}
+            <div class="row">
+                <div class="col-sm-12">
+                    {% if f.image %}
+                    <h2>
+                        {% thumbnail f.image f.size crop="smart" as thumb %}
+                        <img class="{% if f.align_left %}pull-left{% else %}pull-right{% endif %} ml15 mb15"
+                             width="{{ thumb.width }}"
+                             height="{{ thumb.height }}"
+                             src="{{ thumb.url }}" />
+                    </h2>
+                    {% endif %}
+                    <h2>{{ f.question }}</h2>
+                    <p>{{ f.answer|safe|linebreaks }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}

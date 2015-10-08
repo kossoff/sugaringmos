@@ -1,0 +1,63 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+
+{% block title %}Главная{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block main_menu %}{% include 'main_menu.html' with l1_active='frontpage' l2_active='none' %}{% endblock %}
+
+{% block core_class %}pt0{% endblock %}
+
+{% block core %}
+    <div id="bottom-panel" class="mt0">
+        <div class="bottom-panel-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <!-- BOTTOM TEXT : begin -->
+                        <div class="bottom-text various-content">
+
+                            <h3>[ADMIN] Добавить новый блок</h3>
+                                <form action=""
+                                      class="default-form m-validate" role="form"
+                                      enctype="multipart/form-data" method="POST">
+                                    {% csrf_token %}
+                                    <!-- FORM VALIDATION ERROR MESSAGE : start -->
+                                    <p style="display: none;" class="c-alert-message m-warning m-validation-error"><i class="ico fa fa-exclamation-circle"></i>Вы забыли заполнить поле &laquo;НАЗВАНИЕ БЛОКА&raquo;</p>
+                                    <!-- FORM VALIDATION ERROR MESSAGE : end -->
+
+                                    <div class="row">
+                                        <div class="col-sm-5">
+                                                <label for="block-name" class="text-white">Название блока <span>*</span></label>
+                                                <input class="m-required" name="block_name" id="block-name" placeholder="Введите название...">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label for="block-type" class="text-white">Тип блока <span>*</span></label>
+                                            <select id="block-type" name="block_type" class="selectbox-input">
+                                                {% for type in types_list %}
+                                                <option value="{{ type.id }}">{{ type.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+											<label for="block-type" class="text-white">&nbsp;</label>
+                                            <button data-loading-label="Добавляем..." data-label="Send Message" type="submit" class="submit-btn c-button">Добавить</button>
+                                        </div>
+                                    </div>
+                                </form>
+                        </div>
+                        <!-- BOTTOM TEXT : end -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        {% for b in block_list %}
+            <p>{{ b.id }} - {{ b.name }}</p>
+        {% endfor %}
+    </div>
+{% endblock %}

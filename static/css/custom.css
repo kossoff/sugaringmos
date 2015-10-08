@@ -1,0 +1,64 @@
+﻿/* -----------------------------------------------------------------------------
+
+    This file should be used to add your own CSS definitions or override
+	the existing ones.
+
+----------------------------------------------------------------------------- */
+
+#bottom-panel {
+    color: #585858;
+    background-image: url('../img/vintage_pattern_black_and_white-wallpaper-1680x1050.jpg')
+}
+.text-default {color: #585858;}
+.text-white {color: #FFF!important;}
+
+.no-list-style {list-style: outside none none !important;}
+/* -----------------------------------------------------------------------------
+
+    RESPONSIVE DEFINITIONS
+
+----------------------------------------------------------------------------- */
+
+    /* -------------------------------------------------------------------------
+        LARGE DEVICES
+		devices with width between 992px and 1199px
+    ------------------------------------------------------------------------- */
+
+    @media ( max-width: 1199px ) {
+
+		/* your CSS here */
+
+	}
+
+    /* -------------------------------------------------------------------------
+        MEDIUM DEVICES
+		devices with width between 768px and 991px
+    ------------------------------------------------------------------------- */
+
+    @media ( max-width: 991px ) {
+
+		/* your CSS here */
+
+	}
+
+	/* -------------------------------------------------------------------------
+        SMALL DEVICES
+		devices with width between 481px and 767px
+    ------------------------------------------------------------------------- */
+
+    @media ( max-width: 767px ) {
+
+		/* your CSS here */
+
+	}
+
+	/* -------------------------------------------------------------------------
+        EXTRA SMALL DEVICES
+		devices with width up to 480px
+    ------------------------------------------------------------------------- */
+
+	@media ( max-width: 480px ) {
+
+		/* your CSS here */
+
+	}

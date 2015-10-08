@@ -1,0 +1,97 @@
+{% extends "adminka_index.html" %}
+{% load staticfiles %}
+
+{% block title %}Вопросы и ответы{% endblock %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'js/plugins/forms/uniform.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/interface/datatables.min.js' %}"></script>
+{% endblock %}
+
+{% block adminka_menu %}{% include 'adminka_menu.html' with active='faq' %}{% endblock %}
+
+{% block page_name %}Список{% endblock %}
+{% block page_info %}Вопросы и ответы{% endblock %}
+
+{% block breadcrumbs %}
+    <li><a href="{% url 'ns_adminka:adhome' %}">Главная</a></li>
+    <li class="active">Вопросы и ответы</li>
+{% endblock %}
+
+{% block middle %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".datatable table").dataTable({
+                "order": [[ 0, "asc" ]],
+                "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [-1] }],
+                pagingType: 'simple',
+                dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+                language: { paginate: { 'next': 'Дальше →', 'previous': '← Назад' },
+                            search: '<span>Поиск:</span> _INPUT_',
+                            emptyTable: "Нет данных",
+                            zeroRecords: "Нет совпадающих записей",
+                            info: "Показаны _START_ - _END_ из _TOTAL_ записей",
+                            infoEmpty: "",
+                            lengthMenu: "Показывать: _MENU_"},
+                displayLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Все"]]
+            });
+            $(".dataTables_filter input").attr("placeholder", "Введите текст");
+            $('.tip').tooltip();
+        });
+    </script>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h6 class="panel-title"><i class="icon-bubbles5"></i> Вопросы и ответы</h6>
+            <a class="pull-right btn btn-xs btn-default" href="{% url 'ns_adminka:ns_faq:new' %}">
+                <i class="icon-plus"></i> Добавить вопрос-ответ
+            </a>
+        </div>
+        <div class="datatable">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Вопрос</th>
+                        <th>Ответ</th>
+                        <th>Изображение</th>
+                        <th>Включен</th>
+                        <th>Управление</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for f in faq_list %}
+                    <tr>
+                        <td>{{ f.position }}</td>
+                        <td><a href="{% url 'ns_adminka:ns_faq:single' f.id %}">{{ f.question|safe }}</a></td>
+                        <td>{{ f.answer|safe }}</td>
+                        <td>{% if f.image %}
+                                {% if f.align_left %}<i class="icon-paragraph-right"></i>{% endif %}
+                                    <i class="icon-image2"></i>
+                                {% if not f.align_left %}<i class="icon-paragraph-left"></i>{% endif %}
+                            {% else %}&mdash;{% endif %}</td>
+                        <td>{% if f.enabled %}<i class="icon-checkmark3"></i>{% else %}&mdash;{% endif %}</td>
+                        <td>
+                            <div class="table-controls">
+                                {% if forloop.first and forloop.last %}
+                                    &mdash;
+                                {% else %}
+                                    {% if forloop.first %}
+                                        <a class="btn btn-primary btn-xs btn-icon tip mr34" href="{% url 'ns_adminka:ns_faq:position' f.id 'posinc' %}" data-original-title="Вниз"><i class="icon-arrow-down"></i></a>
+                                    {% elif forloop.last %}
+                                        <a class="btn btn-primary btn-xs btn-icon tip mr34" href="{% url 'ns_adminka:ns_faq:position' f.id 'posdec' %}" data-original-title="Вверх"><i class="icon-arrow-up"></i></a>
+                                    {% else %}
+                                        <a class="btn btn-primary btn-xs btn-icon tip" href="{% url 'ns_adminka:ns_faq:position' f.id 'posinc' %}" data-original-title="Вниз"><i class="icon-arrow-down"></i></a>
+                                        <a class="btn btn-primary btn-xs btn-icon tip" href="{% url 'ns_adminka:ns_faq:position' f.id 'posdec' %}" data-original-title="Вверх"><i class="icon-arrow-up"></i></a>
+                                    {% endif %}
+                                {% endif %}
+				            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

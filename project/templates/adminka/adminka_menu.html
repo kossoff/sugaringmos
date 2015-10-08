@@ -1,0 +1,23 @@
+{% if active %}
+    <li {% if active == 'home' %}class="active"{% endif %}>
+        <a href="{% url 'ns_adminka:adhome' %}"><i class="icon-home3 mr5"></i> <span>Главная</span></a>
+    </li>
+    <li {% if active == 'services' %}class="active"{% endif %}>
+        <a href="{% url 'ns_adminka:ns_services:list' %}"><i class="icon-flag2 mr5"></i> <span>Услуги</span></a>
+    </li>
+    <li {% if active == 'prices' %}class="active"{% endif %}>
+        <a href="{% url 'ns_adminka:ns_prices:page' %}"><i class="icon-coin mr5"></i> <span>Цены</span></a>
+    </li>
+    <li {% if active == 'sugarwaxing' %}class="active"{% endif %}>
+        <a href="{% url 'ns_adminka:ns_sugarwaxing:page' %}"><i class="icon-file mr5"></i> <span>Шугаринг или воск</span></a>
+    </li>
+    <li {% if active == 'faq' %}class="active"{% endif %}>
+        <a href="{% url 'ns_adminka:ns_faq:list' %}"><i class="icon-bubbles5 mr5"></i> <span>Вопросы и ответы</span></a>
+    </li>
+    <li {% if active == 'contacts' %}class="active"{% endif %}>
+        <a href="{% url 'ns_adminka:ns_contacts:list' %}"><i class="icon-address-book mr5"></i> <span>Контакты</span></a>
+    </li>
+    <li {% if active == 'changepass' %}class="active"{% endif %}>
+        <a href="{% url 'ns_adminka:changepass' %}"><i class="icon-key mr5"></i> <span>Смена пароля</span></a>
+    </li>
+{% endif %}

@@ -1,0 +1,68 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <title>{% block title %}DEFAULT{% endblock %} | АДМИНКА</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/londinium-theme.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/icons.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/fenix.css' %}" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/application_blank.js' %}"></script>
+    <!-- Plugins -->
+    <script type="text/javascript" src="{% static 'js/plugins/interface/daterangepicker.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/interface/moment.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/interface/jgrowl.min.js' %}"></script>
+    {% block head %}{% endblock %}
+</head>
+<body class="full-width page-condensed">
+	<!-- Login wrapper -->
+	<div class="login-wrapper">
+    	<form class="" role="form" enctype="multipart/form-data"
+              action="{% url 'ns_adminka:login' %}" method="POST">
+            {% csrf_token %}
+			<div class="popup-header">
+				<span class="text-semibold">Вход в админку</span>
+			</div>
+			<div class="well">
+				<div class="form-group has-feedback">
+					<label>Логин</label>
+					<input type="text" class="form-control" name="log" placeholder="Введите логин...">
+					<i class="icon-users form-control-feedback"></i>
+				</div>
+
+				<div class="form-group has-feedback">
+					<label>Пароль</label>
+					<input type="password" class="form-control" name="pwd" placeholder="Введите пароль...">
+					<i class="icon-lock form-control-feedback"></i>
+				</div>
+
+				<div class="row form-actions">
+					<div class="col-xs-6">
+						<button type="submit" class="btn btn-primary pull-right"><i class="icon-menu2"></i> Войти</button>
+					</div>
+				</div>
+			</div>
+    	</form>
+	</div>  
+	<!-- /login wrapper -->
+
+
+    <!-- Footer -->
+    <div class="footer clearfix">
+        <div class="pull-left">&copy; 2015 <strong>{{ contacts.brand }}</strong></div>
+        <!--div class="pull-right icons-group">
+            <a href="#"><i class="icon-screen2"></i></a>
+            <a href="#"><i class="icon-balance"></i></a>
+            <a href="#"><i class="icon-cog3"></i></a>
+        </div-->
+    </div>
+    <!-- /footer -->
+</body>
+</html>

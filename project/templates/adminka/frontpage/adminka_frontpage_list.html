@@ -1,0 +1,237 @@
+{% extends "adminka_index.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'js/plugins/forms/validate.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/forms/uniform.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/interface/datatables.min.js' %}"></script>
+{% endblock %}
+
+{% block adminka_menu %}{% include 'adminka_menu.html' with active='home' %}{% endblock %}
+
+{% block page_name %}Главная страница{% endblock %}
+{% block page_info %}Главная страница{% endblock %}
+
+{% block breadcrumbs %}
+    <li><a href="{% url 'ns_adminka:adhome' %}">Главная</a></li>
+{% endblock %}
+
+{% block middle %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".datatable table").dataTable({
+                "order": [[ 0, "asc" ]],
+                "aoColumnDefs": [{ 'bSortable': false, 'aTargets': [-1] }],
+                pagingType: 'simple',
+                dom: '<"datatable-header"fl><"datatable-scroll"t><"datatable-footer"ip>',
+                language: { paginate: { 'next': 'Дальше →', 'previous': '← Назад' },
+                            search: '<span>Поиск:</span> _INPUT_',
+                            emptyTable: "Нет данных",
+                            zeroRecords: "Нет совпадающих записей",
+                            info: "Показаны _START_ - _END_ из _TOTAL_ записей",
+                            infoEmpty: "",
+                            lengthMenu: "Показывать: _MENU_"},
+                displayLength: 10,
+                lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Все"]]
+            });
+            $(".dataTables_filter input").attr("placeholder", "Введите текст");
+            $('.tip').tooltip();
+
+            $(".styled, .multiselect-container input").uniform({
+                radioClass: 'choice',
+                fileDefaultHtml: 'Выберите файл .jpg или .png',
+                selectAutoWidth: false
+            });
+        });
+    </script>
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="panel-title"><i class="icon-images"></i> Слайдер</h6>
+                <a class="pull-right btn btn-xs btn-default" href="{% url 'ns_adminka:ns_frontpage:slide_crud' 0 'insert' %}">
+                    <i class="icon-plus"></i> Добавить слайд
+                </a>
+            </div>
+            <div class="datatable">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Изображение</th>
+                            <th>Название</th>
+                            <th>Включен</th>
+                            <th>Управление</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for slide in slides %}
+                        <tr>
+                            <td>{{ slide.position }}</td>
+                            <td>
+                                {% if slide.image %}
+                                    {% thumbnail slide.image '170x120' crop="smart" as thumb %}
+                                    <img class="thumbnail thumbnail-boxed"
+                                         width="{{ thumb.width }}"
+                                         height="{{ thumb.height }}"
+                                         src="{{ thumb.url }}" />
+                                {% else %}
+                                    <img class="thumbnail thumbnail-boxed"
+                                         width="170"
+                                         height="120"
+                                         src="{{ STATIC_URL }}images/no_image.png" />
+                                {% endif %}
+                            </td>
+                            <td>{{ slide.title }}</td>
+                            <td>{% if slide.enabled %}<i class="icon-checkmark3"></i>{% else %}&mdash;{% endif %}</td>
+                            <td>
+                                <div class="table-controls">
+                                    {% if forloop.first and forloop.last %}
+                                    {% else %}
+                                        {% if forloop.first %}
+                                            <a class="btn btn-primary btn-xs btn-icon tip mr34" href="{% url 'ns_adminka:ns_frontpage:slide_crud' slide.id 'posinc' %}" data-original-title="Вниз"><i class="icon-arrow-down"></i></a>
+                                        {% elif forloop.last %}
+                                            <a class="btn btn-primary btn-xs btn-icon tip mr34" href="{% url 'ns_adminka:ns_frontpage:slide_crud' slide.id 'posdec' %}" data-original-title="Вверх"><i class="icon-arrow-up"></i></a>
+                                        {% else %}
+                                            <a class="btn btn-primary btn-xs btn-icon tip" href="{% url 'ns_adminka:ns_frontpage:slide_crud' slide.id 'posinc' %}" data-original-title="Вниз"><i class="icon-arrow-down"></i></a>
+                                            <a class="btn btn-primary btn-xs btn-icon tip" href="{% url 'ns_adminka:ns_frontpage:slide_crud' slide.id 'posdec' %}" data-original-title="Вверх"><i class="icon-arrow-up"></i></a>
+                                        {% endif %}
+                                    {% endif %}
+                                    <a class="btn btn-primary btn-xs btn-icon tip" href="{% url 'ns_adminka:ns_frontpage:slide_single' slide.id %}" data-original-title="Редактировать"><i class="icon-pencil"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="panel-title"><i class="icon-image2"></i> Баннер</h6>
+                <button class="btn btn-xs btn-default pull-right" type="submit"
+                        onClick='$("#banner_upload_form").submit(); return false'>
+                    <i class="icon-disk"></i> Сохранить
+                </button>
+                {% if banner.image %}
+                <a class="btn btn-xs btn-danger pull-right" type="submit"
+                   href="{% url 'ns_adminka:ns_frontpage:banner' banner.id 'clear' %}">
+                    <i class="icon-close"></i> Удалить изображение
+                </a>
+                {% endif %}
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal validate" role="form" enctype="multipart/form-data"
+                      action="{% url 'ns_adminka:ns_frontpage:banner' banner.id 'upload' %}" method="POST"
+                      id="banner_upload_form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label text-right">Файл:</label>
+                        <div class="col-sm-10">
+                            <input type="file" name="banner_image" class="styled form-control" placeholder="Выберите файл"/>
+                        </div>
+                    </div>
+                    <div class="form-group mb0">
+                        <label class="col-sm-2 control-label text-right">Изображение:</label>
+                        <div class="col-md-10">
+                            {% if banner.image %}
+                                {% thumbnail banner.image '1400x320' crop="smart" as thumb %}
+                                <img class="thumbnail thumbnail-boxed"
+                                     width="100%"
+                                     height="100%"
+                                     src="{{ thumb.url }}" />
+                            {% else %}
+                                <img class="thumbnail thumbnail-boxed"
+                                     width="170"
+                                     height="120"
+                                     src="{{ STATIC_URL }}images/no_image.png" />
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h6 class="panel-title"><i class="icon-bubbles5"></i> Самое популярное</h6>
+                <a class="pull-right btn btn-xs btn-default" href="{% url 'ns_adminka:ns_frontpage:advert_crud' 0 'insert' %}">
+                    <i class="icon-plus"></i> Добавить блок
+                </a>
+            </div>
+            <div class="datatable">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Изображение</th>
+                            <th>Заголовок</th>
+                            <th>Ссылка</th>
+                            <th>Текст</th>
+                            <th>Включен</th>
+                            <th>Управление</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for adv in adverts %}
+                        <tr>
+                            <td>{{ adv.position }}</td>
+                            <td>
+                                {% if adv.image %}
+                                    {% thumbnail adv.image '240x240' crop="smart" as thumb %}
+                                    <img class="thumbnail thumbnail-boxed"
+                                         width="{{ thumb.width }}"
+                                         height="{{ thumb.height }}"
+                                         src="{{ thumb.url }}" />
+                                {% else %}
+                                    <img class="thumbnail thumbnail-boxed"
+                                         width="170"
+                                         height="120"
+                                         src="{{ STATIC_URL }}images/no_image.png" />
+                                {% endif %}
+                            </td>
+                            <td>{{ adv.title }}</td>
+                            <td>{{ adv.link }}</td>
+                            <td>{{ adv.text }}</td>
+                            <td>{% if adv.enabled %}<i class="icon-checkmark3"></i>{% else %}&mdash;{% endif %}</td>
+                            <td>
+                                <div class="table-controls">
+                                    {% if forloop.first and forloop.last %}
+                                    {% else %}
+                                        {% if forloop.first %}
+                                            <a class="btn btn-primary btn-xs btn-icon tip mr34"
+                                               href="{% url 'ns_adminka:ns_frontpage:advert_crud' adv.id 'posinc' %}"
+                                               data-original-title="Вниз"><i class="icon-arrow-down"></i></a>
+                                        {% elif forloop.last %}
+                                            <a class="btn btn-primary btn-xs btn-icon tip mr34"
+                                               href="{% url 'ns_adminka:ns_frontpage:advert_crud' adv.id 'posdec' %}"
+                                               data-original-title="Вверх"><i class="icon-arrow-up"></i></a>
+                                        {% else %}
+                                            <a class="btn btn-primary btn-xs btn-icon tip"
+                                               href="{% url 'ns_adminka:ns_frontpage:advert_crud' adv.id 'posinc' %}"
+                                               data-original-title="Вниз"><i class="icon-arrow-down"></i></a>
+                                            <a class="btn btn-primary btn-xs btn-icon tip"
+                                               href="{% url 'ns_adminka:ns_frontpage:advert_crud' adv.id 'posdec' %}"
+                                               data-original-title="Вверх"><i class="icon-arrow-up"></i></a>
+                                        {% endif %}
+                                    {% endif %}
+                                    <a class="btn btn-primary btn-xs btn-icon tip"
+                                       href="{% url 'ns_adminka:ns_frontpage:advert_single' adv.id %}"
+                                       data-original-title="Редактировать"><i class="icon-pencil"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

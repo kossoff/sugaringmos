@@ -1,0 +1,218 @@
+{% extends "adminka_index.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}{{ faq.question }}{% endblock %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'js/plugins/forms/validate.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/forms/additional-methods.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/forms/wysihtml5/wysihtml5.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/forms/wysihtml5/toolbar.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/forms/uniform.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/forms/inputmask.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/interface/fancybox.min.js' %}"></script>
+{% endblock %}
+
+{% block adminka_menu %}{% include 'adminka_menu.html' with active='faq' %}{% endblock %}
+
+{% block page_name %}<span><i class="icon-numbered-list mr5"></i>позиция: {{ faq.position }}</span>
+                     <span class="ml10"><i class="icon-clock2 mr5"></i>последнее изменение: {{ faq.changed|date:'d.m.Y [H:i]' }}</span>
+                     <span class="ml10"><i class="icon-clock mr5"></i>создан: {{ faq.created|date:'d.m.Y [H:i]' }}</span>
+{% endblock %}
+{% block page_info %}Вопросы и ответы{% endblock %}
+
+{% block breadcrumbs %}
+    <li><a href="{% url 'ns_adminka:adhome' %}">Главная</a></li>
+    <li><a href="{% url 'ns_adminka:ns_faq:list' %}">Вопросы и ответы</a></li>
+    <li class="active">{{ faq.question }}</li>
+{% endblock %}
+
+{% block breacrumbs_buttons %}
+    <li>
+        {% if faq.enabled %}
+            <a class=""
+               href="{% url 'ns_adminka:ns_faq:active' faq.id 'disable' %}">
+                <i class="icon-eye3"></i> Включен
+            </a>
+        {% else %}
+            <a class=""
+               href="{% url 'ns_adminka:ns_faq:active' faq.id 'enable' %}">
+                <i class="icon-eye-blocked2 text-muted"></i> <span class="text-muted">Скрыт</span>
+            </a>
+        {% endif %}
+    </li>
+    <li><a class="" data-toggle="modal" role="button" href="#faq2delete"><i class="icon-remove2"></i> Удалить</a></li>
+{% endblock %}
+
+{% block middle %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".styled, .multiselect-container input").uniform({
+                radioClass: 'choice',
+                fileDefaultHtml: 'Выберите файл .jpg или .png',
+                selectAutoWidth: false
+            });
+
+            $(".validate").validate({
+                ignore: ":hidden:not(textarea)",
+                rules: {
+                    faq_size: {
+                        required: true,
+                        pattern: "[0-9]{3}x[0-9]{3}",
+                        minlength: 3,
+                        maxlength: 10
+                    }
+                },
+                messages: {
+                    faq_size:{
+                        required: "Это поле обязательно для заполнения",
+                        pattern: "Формат поля: 170x120",
+                        minlength: "Минимальное число символов - 3",
+                        maxlength: "Максимальное число символо - 10"
+                     }
+                },
+                success: function(label) {
+                    label.text('Корректно').addClass('valid');
+                }
+            });
+
+            $(".fancybox").fancybox({
+                openEffect : 'elastic',
+				openSpeed  : 300,
+				closeEffect : 'elastic',
+				closeSpeed  : 300,
+                arrows : true
+            });
+        });
+    </script>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h6 class="panel-title"><i class="icon-bubbles5"></i> Вопрос-ответ</h6>
+                    <a class="pull-right btn btn-xs btn-default" href="{% url 'ns_adminka:ns_faq:edit' faq.id %}"><i class="icon-pencil"></i> Редактировать</a>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">
+                                    <h6 class="panel-title"><i class="icon-accessibility"></i> Вопрос</h6>
+                                </div>
+                                <div class="panel-body">
+                                    {{ faq.question|safe }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="panel panel-success">
+                                <div class="panel-heading">
+                                    <h6 class="panel-title"><i class="icon-accessibility"></i> Ответ</h6>
+                                </div>
+                                <div class="panel-body">
+                                    {{ faq.answer|safe }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h6 class="panel-title"><i class="icon-image2"></i> Изображение</h6>
+                    <button class="btn btn-xs btn-default pull-right" type="submit"
+                            onClick='$("#image_upload_form").submit(); return false'>
+                        <i class="icon-disk"></i> Сохранить
+                    </button>
+                    {% if faq.image %}
+                    <a class="btn btn-xs btn-danger pull-right" type="submit"
+                       href="{% url 'ns_adminka:ns_faq:image' faq.id 'clear' %}">
+                        <i class="icon-close"></i> Удалить изображение
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="panel-body">
+                    <form class="form-horizontal validate" role="form" enctype="multipart/form-data"
+                          action="{% url 'ns_adminka:ns_faq:image' faq.id 'upload' %}" method="POST"
+                          id="image_upload_form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label text-right">Файл:</label>
+                            <div class="col-sm-10">
+                                <input type="file" name="faq_image" class="styled form-control" placeholder="Введите текст вопроса"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label text-right">Размер:</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="faq_size" class="form-control required" placeholder="170x120" value="{{ faq.size }}"/>
+                            </div>
+                        </div>
+                        {% if faq.image %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label text-right">Обтекание:</label>
+                            <div class="col-sm-10">
+                                {% if faq.align_left %}
+                                <a class="btn btn-xs btn-primary"
+                                   href="{% url 'ns_adminka:ns_faq:image' faq.id 'align_right' %}">
+                                    <i class="icon-image2"></i><i class="icon-paragraph-left"></i> Изображение слева
+                                </a>
+                                {% else %}
+                                <a class="btn btn-xs btn-primary"
+                                   href="{% url 'ns_adminka:ns_faq:image' faq.id 'align_left' %}">
+                                    <i class="icon-paragraph-right"></i><i class="icon-image2"></i> Изображение справа
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="form-group mb0">
+                            <label class="col-sm-2 control-label text-right">Изображение:</label>
+                            <div class="col-md-10">
+                                {% if faq.image %}
+                                    {% thumbnail faq.image faq.size crop="smart" as thumb %}
+                                    <img class="thumbnail thumbnail-boxed"
+                                         width="{{ thumb.width }}"
+                                         height="{{ thumb.height }}"
+                                         src="{{ thumb.url }}" />
+                                {% else %}
+                                    <img class="thumbnail thumbnail-boxed"
+                                         width="170"
+                                         height="120"
+                                         src="{{ STATIC_URL }}images/no_image.png" />
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Small modal -->
+    <div id="faq2delete" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><i class="icon-remove2"></i> Удаление</h4>
+                </div>
+
+                <div class="modal-body with-padding">
+                    <p>Вы уверены, что хотите удалить вопрос: &laquo;{{ faq.question }}&raquo; ?</p>
+                </div>
+
+                <div class="modal-footer">
+                    <a class="btn btn-danger" href="{% url 'ns_adminka:ns_faq:crud' faq.id 'delete' %}">Удалить</a>
+                    <button class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /small modal -->
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}Ошибка 404{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block main_menu %}{% include 'main_menu.html' with l1_active='none' l2_active='none' %}{% endblock %}
+
+{% block page-header %}
+    <!-- PAGE HEADER : begin -->
+    <div id="page-header">
+        <div class="container">
+            <h1>Ошибка 404</h1>
+            <p>Страница не найдена</p>
+        </div>
+    </div>
+    <!-- PAGE HEADER : begin -->
+{% endblock %}
+
+{% block core_class %}{% endblock %}
+
+{% block core %}
+
+{% endblock %}

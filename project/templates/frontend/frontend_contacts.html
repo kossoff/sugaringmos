@@ -1,0 +1,87 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}Контакты{% endblock %}
+
+{% block head %}{% endblock %}
+
+{% block main_menu %}{% include 'main_menu.html' with l1_active='contacts' l2_active='none' %}{% endblock %}
+
+{% block page-header %}
+    <!-- PAGE HEADER : begin -->
+    <div id="page-header">
+        <div class="container">
+            <h1>Контакты</h1>
+            <ul class="breadcrumbs no-list-style">
+                <li><a href="{% url 'home' %}">Главная</a></li>
+                <li>Контакты</li>
+            </ul>
+        </div>
+    </div>
+    <!-- PAGE HEADER : begin -->
+{% endblock %}
+
+{% block core_class %}{% endblock %}
+
+{% block core %}
+    <!-- ADDRESS SECTION : begin -->
+    <section>
+        <h2>Как нас найти</h2>
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- MAP : begin -->
+                <div class="c-map">
+                    {{ contacts.map|safe }}
+                </div>
+                <!-- MAP : end -->
+            </div>
+            <div class="col-lg-4">
+                <div class="">
+                        <p>{{ contacts.text }}</p>
+                </div>
+
+                <div class="c-icon-block">
+                    <i class="ico fa fa-phone"></i>
+                    <div class="icon-block-inner">
+                        <p>
+                            <strong>{{ contacts.phone }}</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="c-icon-block">
+                    <i class="ico fa fa-envelope-o"></i>
+                    <div class="icon-block-inner">
+                        <p>
+                            <strong>{{ contacts.email }}</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="c-icon-block">
+                    <i class="ico fa fa-map-marker"></i>
+                    <div class="icon-block-inner">
+                        <p>
+                            <strong>{{ contacts.address }}</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="c-icon-block">
+                    <i class="ico fa fa-clock-o"></i>
+                    <div class="icon-block-inner">
+                        <dl>
+                            <dt>Пн. - Пт.:</dt>
+                            <dd>{{ contacts.weekdays }}</dd>
+                            <dt>Сб. - Вс.:</dt>
+                            <dd>{{ contacts.weekend }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- ADDRESS SECTION : end -->
+{% endblock %}

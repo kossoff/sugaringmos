@@ -1,0 +1,114 @@
+{% extends "adminka_index.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+{% block title %}Контакты (редактирование){% endblock %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'js/plugins/forms/validate.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/forms/additional-methods.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/plugins/forms/uniform.min.js' %}"></script>
+{% endblock %}
+
+{% block adminka_menu %}{% include 'adminka_menu.html' with active='contacts' %}{% endblock %}
+
+{% block page_name %}Контактные данные (редактирование){% endblock %}
+{% block page_info %}Контакты{% endblock %}
+
+{% block breadcrumbs %}
+    <li><a href="{% url 'ns_adminka:adhome' %}">Главная</a></li>
+    <li><a href="{% url 'ns_adminka:ns_contacts:list' %}">Контакты</a></li>
+    <li class="active">Редактирование</li>
+{% endblock %}
+
+{% block breacrumbs_buttons %}{% endblock %}
+
+{% block middle %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".validate").validate({
+                ignore: ":hidden:not(textarea)",
+                rules: {
+                    con_phone: {required: true, minlength: 6, maxlength: 20},
+                    con_email: {required: true, minlength: 6, maxlength: 20},
+                    con_brand: {required: true, minlength: 6},
+                    con_address: {required: true, minlength: 6},
+                    con_map: {maxlength: 1000},
+                    con_text: {maxlength: 1000},
+                    con_weekdays: {
+                        required: true, minlength: 6, maxlength: 20,
+                        pattern: "^(1?[0-9]|2[0-3]):[0-5][0-9] - (1?[0-9]|2[0-3]):[0-5][0-9]$"
+                    },
+                    con_weekend: {
+                        required: true, minlength: 6, maxlength: 20,
+                        pattern: "^(1?[0-9]|2[0-3]):[0-5][0-9] - (1?[0-9]|2[0-3]):[0-5][0-9]$"
+                    }
+                },
+                messages: {
+                    con_phone:{
+                        required: "Это поле обязательно для заполнения",
+                        minlength: "Минимальное число символов - 6",
+                        maxlength: "Максимальное число символов - 20"
+                    },
+                    con_email:{
+                        required: "Это поле обязательно для заполнения",
+                        minlength: "Минимальное число символов - 6",
+                        maxlength: "Максимальное число символов - 20"
+                    },
+                    con_brand:{
+                        required: "Это поле обязательно для заполнения",
+                        minlength: "Минимальное число символов - 6"
+                    },
+                    con_address:{
+                        required: "Это поле обязательно для заполнения",
+                        minlength: "Минимальное число символов - 6"
+                    },
+                    con_map: {maxlength: "Максимальное число символов - 1000"},
+                    con_text: {maxlength: "Максимальное число символов - 1000"},
+                    con_weekdays:{
+                        required: "Это поле обязательно для заполнения",
+                        minlength: "Минимальное число символов - 11",
+                        maxlength: "Максимальное число символов - 13",
+                        pattern: "Формат времени: 10:00 - 21:00"
+                    },
+                    con_weekend:{
+                        required: "Это поле обязательно для заполнения",
+                        minlength: "Минимальное число символов - 11",
+                        maxlength: "Максимальное число символов - 13",
+                        pattern: "Формат времени: 10:00 - 21:00"
+                    }
+                },
+                success: function(label) {
+                    label.text('Корректно').addClass('valid');
+                }
+            });
+        });
+    </script>
+
+    <form class="form-horizontal validate" role="form" enctype="multipart/form-data"
+          action="{% url 'ns_adminka:ns_contacts:update' %}" method="POST">
+        {% csrf_token %}
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h6 class="panel-title">
+                <i class="icon-pencil"></i> Редактирование контактных данных
+            </h6></div>
+            <div class="panel-body">
+
+                {% for c in conlist %}
+                <div class="form-group">
+                    <label class="col-sm-2 control-label text-right">{{ c.name }}: {% if c.code != 'map' %}<span class="mandatory">*</span>{% endif %}</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="con_{{ c.code }}" class="{% if c.code != 'map' %}required{% endif %} form-control" placeholder="Введите {{ c.name }}" value="{{ c.body }}"/>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <div class="form-actions text-right">
+                    <input type="submit" value="Сохранить" class="btn btn-success"/>
+                    <a class="btn btn-danger" href="{% url 'ns_adminka:ns_contacts:list' %}">Отмена</a>
+                </div>
+
+            </div>
+        </div>
+    </form>
+{% endblock %}

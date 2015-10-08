@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+{% load staticfiles %}
+
+{% block title %}Главная{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block page_name %}Главная{% endblock %}
+{% block page_info %}ПК &laquo;Ситуационный центр&raquo;{% endblock %}
+
+{% block breadcrumbs %}
+    <li class="active"><a href="{% url 'home' %}">Главная</a></li>
+{% endblock %}
+
+{% block main_menu %}{% include 'main_menu.html' with active='home' %}{% endblock %}
+
+{% block middle %}
+    <!-- Callout -->
+    <div class="callout callout-info fade in">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <h5>Главная страница</h5>
+        <ul class="">
+            <li>
+                <strong>15.04.2015</strong><br/>
+                На этой странице будет оперативная сводка<br/>
+                Возможно требуется механизм для настройки вывода данной страницы
+            </li>
+        </ul>
+    </div>
+    <!-- /callout -->
+{% endblock %}
